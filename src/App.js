@@ -1,71 +1,34 @@
 import './App.css';
-import React, { useEffect, useState } from "react";
-import { LoginButton, LogoutButton, Text, useSession, CombinedDataProvider } from "@inrupt/solid-ui-react";
-import { getSolidDataset, getUrlAll, getThing } from "@inrupt/solid-client";
-import { getOrCreateCertifList } from "./utils/getOrCreateCertifList";
+import React, {useEffect, useState } from "react";
+import { 
+  LoginButton, 
+  LogoutButton, 
+  Text, 
+  useSession, 
+  CombinedDataProvider, 
+  getSolidDataset, 
+  getThingAll
+} from "@inrupt/solid-ui-react";
+import UserForm from './components/userForm';
+import CertifList from './components/certifList';
 
 const STORAGE_PREDICATE = "http://www.w3.org/ns/pim/space#storage";
 
 const authOptions = {
-  clientName: "Certif-create App",
+  clientName: "certif-validator App",
 };
 
 function App() {
 
   const { session } = useSession();
+  const [userWebId, setUserWebId] = useState("");
+  const [certifs, setCertifs] = useState([])
   const [oidcIssuer, setOidcIssuer] = useState("");
-  const [certifList, setCertifList] = useState("");
 
   const handleChange = (event) => {
     setOidcIssuer(event.target.value);
   };
 
-  useEffect(() => {
-    if (!session || !session.info.isLoggedIn) return;
-    (async () => {
-      const profileDataset = await getSolidDataset(session.info.webId, {
-        fetch: session.fetch,
-      });
-      const profileThing = getThing(profileDataset, session.info.webId);
-      const podsUrls = getUrlAll(profileThing, STORAGE_PREDICATE);
-      const pod = podsUrls[0];
-      const containerUri = `${pod}certificates/`;
-      const list = await getOrCreateCertifList(containerUri, session.fetch);
-      setCertifList(list);
-
-      
-        // const Web3 = require('web3');
-        // const web3 = new Web3("https://eth-rinkeby.alchemyapi.io/v2/aOmf3RlJunKUJcRWbVXWMdZukj_SMvTl");
-        // // Modern dapp browsers...
-        // if (window.ethereum) {
-        //     window.web3 = new Web3("https://eth-rinkeby.alchemyapi.io/v2/aOmf3RlJunKUJcRWbVXWMdZukj_SMvTl");
-        //     try {
-        //         // Request account access if needed
-        //         await window.ethereum.enable();
-        //         // Acccounts now exposed
-    
-        //     } catch (error) {
-        //         // User denied account access...
-        //     }
-        // }
-        // // Legacy dapp browsers...
-        // else if (window.web3) {
-        //     window.web3 = new Web3(web3.currentProvider);
-        //     // Acccounts always exposed
-        // }
-        // // Non-dapp browsers...
-        // else {
-        //     console.log('Non-Ethereum browser detected. You should consider trying MetaMask!');
-        //}
-    
-
-    })();
-
-    
-    
-  }, [session, session.info.isLoggedIn]);
-
-  
 
   return (
     <div className="app-container">
@@ -86,6 +49,17 @@ function App() {
               <LogoutButton/>
           </div>
           <section>
+            
+            <UserForm
+              setUserWebId={setUserWebId}
+              setCertifs={setCertifs}
+              session={session}
+            />
+            <span>{ !userWebId ? null : `Certifications from : ${userWebId} `}</span>
+            <CertifList
+              certifs={certifs}
+              session={session}
+            />
             {/* <QueList certifList={certifList} setCertifList={setCertifList}/> */}
           </section>
         </CombinedDataProvider>
