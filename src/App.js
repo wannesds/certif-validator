@@ -11,6 +11,7 @@ import {
 } from "@inrupt/solid-ui-react";
 import UserForm from './components/userForm';
 import CertifList from './components/certifList';
+import { FetchCertifs } from './utils/fetchCertifs';
 
 const STORAGE_PREDICATE = "http://www.w3.org/ns/pim/space#storage";
 
@@ -22,12 +23,28 @@ function App() {
 
   const { session } = useSession();
   const [userWebId, setUserWebId] = useState("");
-  const [certifs, setCertifs] = useState([])
+  const [certifs, setCertifs] = useState('')
   const [oidcIssuer, setOidcIssuer] = useState("");
 
   const handleChange = (event) => {
     setOidcIssuer(event.target.value);
   };
+
+  useEffect(() => {
+    if (!session || !session.info.isLoggedIn) return;
+    (async () => {
+      try {
+        const certifList = await FetchCertifs(`https://${userWebId}/certificates/index.ttl`, session)
+        console.log("certifs" , certifList)
+        setCertifs(certifList)
+      } catch(error) {
+        console.log("fetch failed", error);
+      }
+   
+    })();
+
+  }, [session, session.info.isLoggedIn, userWebId]);
+
 
 
   return (
@@ -55,10 +72,10 @@ function App() {
               setCertifs={setCertifs}
               session={session}
             />
-            <span>{ !userWebId ? null : `Certifications from : ${userWebId} `}</span>
+            <span>{ !userWebId ? null : `Certificates from : ${userWebId} `}</span>
             <CertifList
               certifs={certifs}
-              session={session}
+              userWebId={`https://${userWebId}/profile/card#me`}
             />
             {/* <QueList certifList={certifList} setCertifList={setCertifList}/> */}
           </section>

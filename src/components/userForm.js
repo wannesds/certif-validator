@@ -11,14 +11,14 @@ function UserForm({setUserWebId, setCertifs, session}) {
 
     const handleFetch = async (e) => {
         e.preventDefault();
-        try {
-        const certifList = await FetchCertifs(input, session)
-        const certifThings = certifList ? getThingAll(certifList) : [];
-        setCertifs(certifThings)
+        // try {
+        // const certifList = await FetchCertifs(input, session)
+        // const certifThings = certifList ? getThingAll(certifList) : [];
+        // setCertifs(certifThings)
         setUserWebId(input)
-        } catch {
-        console.log("dataset fetch failed")
-        }
+        // } catch {
+        // console.log("dataset fetch failed")
+        // }
     };
 
     const handleChange = (e) => {   

@@ -7,23 +7,14 @@ import {
     getStringByLocaleAll,
 } from "@inrupt/solid-client";
 import CertifItem from './certifItem';
-//import CheckIfValid from '../utils/checkIfValid';
-//import { CheckIfStored } from '../utils/checkIfStored';
-
-const TEXT_PREDICATE = "http://schema.org/text";
-const CREATED_PREDICATE = "http://www.w3.org/2002/12/cal/ical#created";
-const SHA1_PREDICATE = "http://xmlns.com/foaf/0.1/sha1";
 
 
-function CertifList({certifs}){
-    console.log("certifs", certifs)
+function CertifList({certifs, userWebId}){
 
-    const certifThings = certifs.sort((a, b) => {
-        return (
-          getDatetime(a, CREATED_PREDICATE) - getDatetime(b, CREATED_PREDICATE)
-        );
-    });
-    
+ 
+    const certifThings = certifs ? getThingAll(certifs) : [];
+       console.log("certifs2", certifThings)
+
     return(
         <div className="table-container">
             <span className="tasks-message">
@@ -33,16 +24,16 @@ function CertifList({certifs}){
                 <thead>
                     <tr>
                         <th>Certificate</th>
-                        <th>WebID</th>
+                        <th>Hash</th>
                         <th>Valid</th>
-                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
-                    { !certifThings ? <span>no</span>
+                    { !certifThings ? <tr></tr>
                         : certifThings.map( (item, index) => 
                             <CertifItem 
                                 thing={item}
+                                userWebId={userWebId}
                                 key={index}
                             />
                         )

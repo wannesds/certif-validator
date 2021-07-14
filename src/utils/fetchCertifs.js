@@ -4,12 +4,10 @@ import {
 
 export async function FetchCertifs(input, session){
     try {
-        const userUrl = `https://${input}/certificates/index.ttl`
-        console.log("userUrl", userUrl)
-        const certifList = await getSolidDataset(userUrl, { 
+        const certifList = await getSolidDataset(input, { 
           fetch : session.fetch 
         });
-        console.log("certifListDataset", certifList)
+        console.log("certifListDataset 2", certifList)
         return certifList;
     } catch {
         console.log("fetchcertifs has failed")
