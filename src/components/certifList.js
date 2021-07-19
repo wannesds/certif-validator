@@ -1,29 +1,22 @@
-import React, {useEffect, useState} from 'react';
-import { 
-    getThingAll,
-    getUrl,
-    getDatetime,
-    getStringNoLocale,
-    getStringByLocaleAll,
-} from "@inrupt/solid-client";
+import React from 'react';
 import CertifItem from './certifItem';
 
 
-function CertifList({certifs, userWebId}){
+function CertifList({certifThings, userWebId}){
 
  
-    const certifThings = certifs ? getThingAll(certifs) : [];
        console.log("certifs2", certifThings)
 
     return(
         <div className="table-container">
             <span className="tasks-message">
-            There are {certifThings.length} certificates to be validated.
+            There {certifThings.length === 1 ? "is" : "are"} {certifThings.length} certificate{certifThings.length === 1 ? "" : "s"} to be validated.
             </span>
             <table className="table">
                 <thead>
                     <tr>
                         <th>Certificate</th>
+                        {/* <th>WebID</th> */}
                         <th>Hash</th>
                         <th>Valid</th>
                     </tr>

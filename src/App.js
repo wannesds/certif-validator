@@ -6,17 +6,16 @@ import {
   Text, 
   useSession, 
   CombinedDataProvider, 
-  getSolidDataset, 
-  getThingAll
 } from "@inrupt/solid-ui-react";
+import { getSolidDataset, getThingAll } from "@inrupt/solid-client";
 import UserForm from './components/userForm';
 import CertifList from './components/certifList';
-import { FetchCertifs } from './utils/fetchCertifs';
+import CssBaseline from '@material-ui/core/CssBaseline';
 
 const STORAGE_PREDICATE = "http://www.w3.org/ns/pim/space#storage";
 
 const authOptions = {
-  clientName: "certif-validator App",
+  clientName: "Certif-Validator App",
 };
 
 function App() {
@@ -34,7 +33,12 @@ function App() {
     if (!session || !session.info.isLoggedIn) return;
     (async () => {
       try {
-        const certifList = await FetchCertifs(`https://${userWebId}/certificates/index.ttl`, session)
+        const certifset = await getSolidDataset(`https://${userWebId}/certificates/index.ttl`, { 
+          fetch : session.fetch 
+        });
+        const certifList = certifset ? getThingAll(certifset) : [];
+
+      // const certifList = await FetchCertifs(`https://ksbuser.solidcommunity.net/certificates/index.ttl`, session)
         console.log("certifs" , certifList)
         setCertifs(certifList)
       } catch(error) {
@@ -49,6 +53,7 @@ function App() {
 
   return (
     <div className="app-container">
+      <CssBaseline />
       {session.info.isLoggedIn ? ( //logged in?
         <CombinedDataProvider
           datasetUrl={session.info.webId}
@@ -63,10 +68,11 @@ function App() {
                 ]} 
                 className="ma2 dark-blue"
               />
-              <LogoutButton/>
+              <LogoutButton
+                onLogout={() => window.location.reload()}
+              />
           </div>
-          <section>
-            
+          <div className="content">
             <UserForm
               setUserWebId={setUserWebId}
               setCertifs={setCertifs}
@@ -74,11 +80,10 @@ function App() {
             />
             <span>{ !userWebId ? null : `Certificates from : ${userWebId} `}</span>
             <CertifList
-              certifs={certifs}
+              certifThings={certifs}
               userWebId={`https://${userWebId}/profile/card#me`}
             />
-            {/* <QueList certifList={certifList} setCertifList={setCertifList}/> */}
-          </section>
+          </div>
         </CombinedDataProvider>
       ) : (  //if not logged in then
         <div className="message">

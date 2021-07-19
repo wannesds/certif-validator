@@ -5,6 +5,7 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { SessionProvider } from "@inrupt/solid-ui-react";
 
+
 ReactDOM.render(
   <SessionProvider>
     <App />

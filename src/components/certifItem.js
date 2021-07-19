@@ -22,6 +22,7 @@ function CertifItem({thing, userWebId}){
     return(
         <tr> 
             <td>{certifId}</td>
+            {/* <td>{userWebId}</td> */}
             <td>{hash}</td> 
             <td>{valid}</td>         
             <button onClick={handleValidate}>Validate</button>
