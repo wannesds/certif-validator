@@ -2,7 +2,7 @@ import React from 'react';
 import CertifItem from './certifItem';
 
 
-function CertifList({certifThings, userWebId}){
+function CertifList({certifThings, userWebId, session}){
 
  
        console.log("certifs2", certifThings)
@@ -12,27 +12,18 @@ function CertifList({certifThings, userWebId}){
             <span className="tasks-message">
             There {certifThings.length === 1 ? "is" : "are"} {certifThings.length} certificate{certifThings.length === 1 ? "" : "s"} to be validated.
             </span>
-            <table className="table">
-                <thead>
-                    <tr>
-                        <th>Certificate</th>
-                        {/* <th>WebID</th> */}
-                        <th>Hash</th>
-                        <th>Valid</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    { !certifThings ? <tr></tr>
+            <div className="table holder-list">
+                    { !certifThings ? null
                         : certifThings.map( (item, index) => 
                             <CertifItem 
                                 thing={item}
                                 userWebId={userWebId}
+                                session={session}
                                 key={index}
                             />
                         )
                     }
-                </tbody>
-            </table>
+            </div>
         </div>
     );
 }

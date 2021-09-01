@@ -7,26 +7,33 @@ import { CheckIfValid } from '../utils/checkIfValid';
 const TEXT_PREDICATE = "http://schema.org/text";
 const SHA1_PREDICATE = "http://xmlns.com/foaf/0.1/sha1";
 
-function CertifItem({thing, userWebId}){
+function CertifItem({thing, userWebId, session}){
     const [valid, setValid] = useState("")
 
-    const certifId = getStringNoLocale(thing, TEXT_PREDICATE)
-    const hash = getStringNoLocale(thing, SHA1_PREDICATE)
+    //setCertif(GetCertifFile(thing.url, session))
+    //temp fix to get data for checking if valid, should be done by extracting data from certificate, not this way
+    const certifId = thing.url.split("/")[4].slice(0, -4);
+ 
     
     const handleValidate = async () => {
-        console.log("before check", certifId, userWebId)
+        console.log("before check", userWebId)
        const res = await CheckIfValid(userWebId, certifId)
        setValid(res)
     }
 
     return(
-        <tr> 
-            <td>{certifId}</td>
-            {/* <td>{userWebId}</td> */}
-            <td>{hash}</td> 
-            <td>{valid}</td>         
+        // <tr> 
+        //     <td>{userWebId.split("/")[2]}</td>
+        //     <td>{thing.url.split("/")[4].slice(0, -4)}</td>
+        //     {/* <td>{userWebId}</td> */} 
+        //     <td>{valid}</td>         
+        //     <button onClick={handleValidate}>Validate</button>
+        // </tr>
+        <div className="certificate">
+            <span>{certifId}</span>
+            {valid}
             <button onClick={handleValidate}>Validate</button>
-        </tr>
+        </div>
     );
 }
 

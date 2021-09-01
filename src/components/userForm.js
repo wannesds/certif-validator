@@ -14,13 +14,14 @@ function UserForm({setUserWebId}) {
     };
 
   return (
-      <form className="user-read-form">
+      <form className="form">
         <label htmlFor="User WebID">
-            <span>Ex: ksbuser.solidcommunity.net</span>
+            <span>Fill in a user webID</span>
           <input
             id="webID-input"
             type="text"
             //value={todoText}
+            placeholder='ksbuser.solidcommunity.net'
             onChange={handleChange}
           />
         </label>
