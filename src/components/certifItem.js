@@ -1,11 +1,16 @@
 import React, { useState } from 'react';
 import { 
+    getSourceUrl,
     getStringNoLocale,
+    getThingAll
 } from "@inrupt/solid-client";
 import { CheckIfValid } from '../utils/checkIfValid';
+import { GetCertifFile } from '../utils/getCertifFile';
 
 const TEXT_PREDICATE = "http://schema.org/text";
 const SHA1_PREDICATE = "http://xmlns.com/foaf/0.1/sha1";
+const PERSON_PREDICATE = "http://xmlns.com/foaf/0.1/Person";
+
 
 function CertifItem({thing, userWebId, session}){
     const [valid, setValid] = useState("")
@@ -16,9 +21,12 @@ function CertifItem({thing, userWebId, session}){
  
     
     const handleValidate = async () => {
-        console.log("before check", userWebId)
-       const res = await CheckIfValid(userWebId, certifId)
-       setValid(res)
+        const thingData = getThingAll(await GetCertifFile(thing.url, session))[0]
+        const issuerId = getStringNoLocale(thingData, PERSON_PREDICATE)
+        console.log('isserId', issuerId)
+        //const certifId = getStringNoLocale(thingData, TEXT_PREDICATE)
+        const res = await CheckIfValid(userWebId, certifId, issuerId, session)
+        setValid(res)
     }
 
     return(
