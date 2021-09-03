@@ -10,7 +10,7 @@ export async function CheckIfValid(webId, certifId, issuerId, session){
         //GetCertifFile is for getting datatset in general , shoudl rename imo
         const ethAddress = await GetCertifFile(`${issuerId}/public/eth-address.ttl`, session)
         const thing = getThingAll(ethAddress)[0]
-        
+
         console.log("ethAddressExtracted", getStringNoLocale(thing, TEXT_PREDICATE))
 
         //need to get Eth adress from issuer from somewhere
@@ -27,7 +27,7 @@ export async function CheckIfValid(webId, certifId, issuerId, session){
         console.log("hash", hash)
         const validTxn = array.result.find((resTxn) => resTxn.input === '0x' + hash)
         console.log("validTxn", validTxn)
-        const state = validTxn ? "yes" : "no"
+        const state = validTxn ? "VALID" : "NOT VALID"
 
         return state;
     } catch {

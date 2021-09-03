@@ -87,6 +87,9 @@ background: linear-gradient(160deg, $cyan1 0%, $cyan2 100%);
     margin: 0.5em 0;
     display: flex;
     justify-content: space-between;
+    span {
+        margin-right: 2em;
+    }
 }
 .certif-list-message {
     span {

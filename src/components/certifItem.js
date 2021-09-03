@@ -14,6 +14,7 @@ const PERSON_PREDICATE = "http://xmlns.com/foaf/0.1/Person";
 
 function CertifItem({thing, userWebId, session}){
     const [valid, setValid] = useState("")
+    const [issuer, setIssuer] = useState("")
 
     //setCertif(GetCertifFile(thing.url, session))
     //temp fix to get data for checking if valid, should be done by extracting data from certificate, not this way
@@ -24,6 +25,7 @@ function CertifItem({thing, userWebId, session}){
         const thingData = getThingAll(await GetCertifFile(thing.url, session))[0]
         const issuerId = getStringNoLocale(thingData, PERSON_PREDICATE)
         console.log('isserId', issuerId)
+        setIssuer(issuerId)
         //const certifId = getStringNoLocale(thingData, TEXT_PREDICATE)
         const res = await CheckIfValid(userWebId, certifId, issuerId, session)
         setValid(res)
@@ -39,7 +41,8 @@ function CertifItem({thing, userWebId, session}){
         // </tr>
         <div className="certificate">
             <span>{certifId}</span>
-            {valid}
+            <span>{!issuer? null : issuer}</span>
+            <span>{valid}</span>
             <button onClick={handleValidate}>Validate</button>
         </div>
     );
